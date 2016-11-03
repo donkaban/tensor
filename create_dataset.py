@@ -10,8 +10,8 @@ from tflearn.data_utils import *
 log = util.logger.get("DS CREATOR")
 
 RAW_DIR = './raw_data/'
-WIDTH = 600 / 2
-HEIGHT = 382 / 2
+WIDTH = 256
+HEIGHT = 256
 
 
 def create_filelist(name, images_dir, predicate=lambda x: 1):
@@ -23,6 +23,7 @@ def create_filelist(name, images_dir, predicate=lambda x: 1):
 
 
 def create_HDF(name, output='dataset.h5', width=WIDTH, height=HEIGHT):
+    log.nfo('create HDF5 dataset {0:s} {1:d}:{2:d}'.format(output, width, height))
     build_hdf5_image_dataset(name, image_shape=(width, height),
                              mode='file', output_path=output,
                              categorical_labels=True, normalize=True)
@@ -30,5 +31,5 @@ def create_HDF(name, output='dataset.h5', width=WIDTH, height=HEIGHT):
 
 if __name__ == '__main__':
     log.nfo('create dataset, it might take a while... ')
-    create_filelist('data/bank.lst', RAW_DIR, lambda x: "bank")
+    create_filelist('data/bank.lst', RAW_DIR, lambda x: 1)
     create_HDF('data/bank.lst', 'data/bank.h5')
