@@ -24,7 +24,7 @@ _COL_TBL = {
 
 
 class logger(object):
-    def __init__(self, tag, log_level='dbg'):
+    def __init__(self, tag):
         self.tag = str(tag)
 
     @staticmethod
@@ -61,34 +61,31 @@ class logger(object):
         raise RuntimeError(self.fmt(msg))
 
     @staticmethod
-    def get(tag, log_level='dbg'):
-        return logger(tag, log_level)
+    def get(tag):
+        return logger(tag)
 
 
 def zcall(cmd, col='@d', log_prefix='',return_ret_code=False):
     def out_adapt(msg, col):
         if msg == '':
             return
-        log.dbg(log_prefix + col + msg, endl='')
 
-    call_env = os.environ.copy()
     proc = subprocess.Popen(cmd,
                             shell=True,
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
-                            env=call_env)
+                            env=os.environ.copy())
 
     std_iterator = iter(proc.stdout.readline, b"")
     err_iterator = iter(proc.stderr.readline, b"")
     while proc.poll() is None:
         for line in std_iterator:
-            out_adapt(line, col)
+            log.dbg(log_prefix + col + line, endl='')
         for line in err_iterator:
-            out_adapt(line, col)
+            log.err(log_prefix + col + line, endl='')
 
     if return_ret_code:
         return proc.returncode
-
     return proc.returncode == 0
 
 
@@ -104,3 +101,4 @@ if __name__ == '__main__':
     log.err('It is error message')
 
     zcall('ls -la')
+    zcall('git status')
