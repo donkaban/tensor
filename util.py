@@ -65,7 +65,7 @@ class logger(object):
         return logger(tag)
 
 
-def zcall(cmd, col='@d', log_prefix='',return_ret_code=False):
+def zcall(cmd, col='@d', log_prefix='', return_ret_code=False):
     def out_adapt(msg, col):
         if msg == '':
             return
@@ -89,8 +89,11 @@ def zcall(cmd, col='@d', log_prefix='',return_ret_code=False):
     return proc.returncode == 0
 
 
+
+
 if __name__ == '__main__':
     import time
+
     log = logger.get('LOG')
     log.prn('@rRED @p PURPLE @y YELLOW @gGREEN @c CYAN @b BLUE @d DARK ')
     log.prn('@RRED @P PURPLE @Y YELLOW @GGREEN @C CYAN @B BLUE @D DARK ')
